@@ -58,7 +58,10 @@ onBeforeUnmount(() => {
           <div class="col-lg-3 col-md-6 col-8">
             <div class="header-right">
               <div class="header-btn">
-                <a class="btn-default btn-small round" href="/login"> 登陆 </a>
+                <!-- <a class="btn-default btn-small round" href="/login"> 登陆 </a> -->
+                <router-link class="btn-default btn-small round" to="/login"
+                  >登录</router-link
+                >
               </div>
 
               <div
