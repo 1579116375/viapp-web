@@ -1,5 +1,13 @@
 <script lang="ts" setup>
 import SplitDataImg from '@/assets/images/split/split-01.jpg'
+import Button from '@/components/common/Button.vue'
+import RetInfo, { RetProps } from '@/components/common/RetInfo.vue'
+
+const list: RetProps[] = [
+  { title: '车牌', msg: '京A·888888' },
+  { title: '车牌', msg: '京A·888888' },
+  { title: '车牌', msg: '京A·888888' }
+]
 </script>
 
 <template>
@@ -13,15 +21,17 @@ import SplitDataImg from '@/assets/images/split/split-01.jpg'
         </div>
         <div class="col-lg-12 col-xl-6 col-12">
           <div class="split-inner">
-            <h4 class="title">识别信息</h4>
             <p class="description">
-              识别中国大陆各类机动车车牌信息，支持蓝牌、黄牌（单双行）、绿牌、大型新能源（黄绿）、领使馆车牌、警牌、武警牌（单双行）、军牌（单双行）、港澳出入境车牌、农用车牌、民航车牌，并能同时识别图像中的多张车牌
+              点击左侧区域上传含车牌的汽车图片，点击“开始识别”按钮开始识别
             </p>
-            <ul class="split-list">
-              <!-- <li v-for="listItem in splitData.list">{{ listItem }}</li> -->
-            </ul>
+            <div class="rbt-single-widget widget_recent_entries mt--40">
+              <h3 class="title">识别结果</h3>
+              <div class="inner">
+                <ret-info :list="list" />
+              </div>
+            </div>
             <div class="view-more-button mt--35">
-              <!-- <Button :title="splitData.btn.text" :url="splitData.btn.link" /> -->
+              <Button title="开始识别" is-link="false" />
             </div>
           </div>
         </div>
