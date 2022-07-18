@@ -58,7 +58,7 @@ onBeforeUnmount(() => {
           <div class="col-lg-3 col-md-6 col-8">
             <div class="header-right">
               <div class="header-btn">
-                <a class="btn-default btn-small round" href="#"> 登陆 </a>
+                <a class="btn-default btn-small round" href="/login"> 登陆 </a>
               </div>
 
               <div

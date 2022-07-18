@@ -2,12 +2,12 @@
 import MenuItem, { MenuItemData } from '@/components/global/MenuItem.vue'
 
 const keyFunction: MenuItemData[] = [
-  { routerLink: '/', routerName: '图像识别' },
-  { routerLink: '/', routerName: '车辆分析' },
-  { routerLink: '/', routerName: '图像搜索' },
-  { routerLink: '/', routerName: '图像内容安全' },
-  { routerLink: '/', routerName: '图像特效' },
-  { routerLink: '/', routerName: '图像增强' }
+  { routerLink: '/vlpr', routerName: '车牌识别' },
+  { routerLink: '/', routerName: '车型识别' },
+  { routerLink: '/', routerName: '车辆检测' },
+  { routerLink: '/', routerName: '车辆属性识别' },
+  { routerLink: '/', routerName: '车损识别' },
+  { routerLink: '/', routerName: '驾驶行为分析' }
 ]
 
 const elemData1: MenuItemData[] = [

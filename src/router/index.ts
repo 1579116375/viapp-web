@@ -5,6 +5,16 @@ const routes = [
     path: '/',
     name: 'home',
     component: () => import('@/views/home/index.vue')
+  },
+  {
+    path: '/login',
+    name: 'Login',
+    component: () => import('@/views/login/index.vue')
+  },
+  {
+    path: '/vlpr',
+    name: 'Vehicle License Plate Recognition',
+    component: () => import('@/views/vlpr/index.vue')
   }
 ]
 
