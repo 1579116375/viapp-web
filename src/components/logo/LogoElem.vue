@@ -1,6 +1,5 @@
 <script lang="ts" setup>
-import logoLight from '@/assets/images/logo/logo.png'
-import logoDark from '@/assets/images/logo/logo-dark.png'
+import logo from '@/assets/images/logo/logo.png'
 
 interface LogoProps {
   url?: string
@@ -10,8 +9,8 @@ interface LogoProps {
 
 const props = withDefaults(defineProps<LogoProps>(), {
   url: () => '/',
-  lightLogo: () => logoLight,
-  darkLogo: () => logoDark
+  lightLogo: () => logo,
+  darkLogo: () => logo
 })
 </script>
 
