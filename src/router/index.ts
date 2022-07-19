@@ -15,6 +15,11 @@ const routes = [
     path: '/vlpr',
     name: 'Vehicle License Plate Recognition',
     component: () => import('@/views/vlpr/index.vue')
+  },
+  {
+    path: '/test',
+    name: 'Test',
+    component: () => import('@/views/test/index.vue')
   }
 ]
 

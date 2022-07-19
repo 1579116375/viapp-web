@@ -3,9 +3,11 @@ import Button from '@/components/common/Button.vue'
 import RetInfo, { RetProps } from '@/components/common/RetInfo.vue'
 import { ref, getCurrentInstance } from 'vue'
 
-import SplitDataImg from '@/assets/images/split/split-01.jpg'
+import UploadFlagImg from '@/assets/images/split/split-01.jpg'
+import UploadFailed from '@/assets/images/error/upload-failed.png'
+import axios from 'axios'
 
-const RecogImg = ref(SplitDataImg)
+const RecogImg = ref(UploadFlagImg)
 
 const list: RetProps[] = [
   { title: '车牌', msg: '京A·888888' },
@@ -22,10 +24,34 @@ function uploadImgTrigger() {
 function uploadImg(event: any) {
   const file = event.target.files[0]
   const formData = new FormData()
+  console.log(file)
   formData.append('file', file)
-  RecogImg.value = 'https://s1.328888.xyz/2022/07/19/lwZVi.jpg'
-}
 
+  let imgUrl = ''
+
+  axios
+    .post('http://127.0.0.1:6326/v1/img', formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data'
+      }
+    })
+    .then((resp) => {
+      imgUrl = resp.data.img_url
+      console.log('axios -- ' + imgUrl)
+      // console.log(resp.data.img_url)
+    })
+    .catch((error) => {
+      console.log(error)
+    })
+    .finally(() => {
+      if (imgUrl !== '') {
+        console.log('if -- ' + imgUrl)
+        RecogImg.value = imgUrl
+      } else {
+        RecogImg.value = UploadFailed
+      }
+    })
+}
 </script>
 
 <template>
@@ -33,8 +59,19 @@ function uploadImg(event: any) {
     <div class="split-wrapper">
       <div class="row no-gutters radius-10 align-items-center">
         <div class="col-lg-12 col-xl-6 col-12">
-          <input id="file-upload" ref="updRef" @change="uploadImg" type="file" accept="image/*" name="picture" />
-          <div id="recog-img-con" class="thumbnail image-left-content" @click="uploadImgTrigger">
+          <input
+            id="file-upload"
+            ref="updRef"
+            @change="uploadImg"
+            type="file"
+            accept="image/*"
+            name="picture"
+          />
+          <div
+            id="recog-img-con"
+            class="thumbnail image-left-content"
+            @click="uploadImgTrigger"
+          >
             <img :src="RecogImg" alt="Split Image" />
           </div>
         </div>
