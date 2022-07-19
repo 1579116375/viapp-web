@@ -1,11 +1,11 @@
 <script lang="ts" setup>
 import Button from '@/components/common/Button.vue'
 import RetInfo, { RetProps } from '@/components/common/RetInfo.vue'
-import { ref, getCurrentInstance, onMounted, onBeforeUpdate, onUpdated } from 'vue'
+import { ref, getCurrentInstance } from 'vue'
 
 import SplitDataImg from '@/assets/images/split/split-01.jpg'
 
-let RecogImg = ref(SplitDataImg)
+const RecogImg = ref(SplitDataImg)
 
 const list: RetProps[] = [
   { title: '车牌', msg: '京A·888888' },
@@ -23,7 +23,9 @@ function uploadImg(event: any) {
   const file = event.target.files[0]
   const formData = new FormData()
   formData.append('file', file)
+  RecogImg.value = 'https://s1.328888.xyz/2022/07/19/lwZVi.jpg'
 }
+
 </script>
 
 <template>
