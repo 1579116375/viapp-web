@@ -1,77 +1,107 @@
-<script lang="ts" setup>
-import { getCurrentInstance } from 'vue'
-import AppLayout from '../../components/AppLayout.vue'
-import IconSvg from '../../components/icon/IconSvg.vue'
+<script>
+import '@/assets/js/tracking-min.js'
+import '@/assets/js/face-min.js'
 
-const curInstance = getCurrentInstance()
+export default {
+  data() {
+    return {
+      video: null,
+      screenshotCanvas: null,
+      uploadLock: true // 上传锁
+    }
+  },
+  mounted() {
+    this.init()
+  },
+  methods: {
+    // 初始化设置
+    init() {
+      this.video = document.getElementById('video')
+      this.screenshotCanvas = document.getElementById('screenshotCanvas')
 
-function callCamera() {
-  // H5调用电脑摄像头API
-  navigator.mediaDevices
-    .getUserMedia({
-      video: true
-    })
-    .then((success) => {
-      const video: HTMLVideoElement = curInstance?.refs
-        .video as HTMLVideoElement
-      // 摄像头开启成功
-      video.srcObject = success
-      // 实时拍照效果
-      video.play()
-    })
-    .catch((_error) => {
-      console.error('摄像头开启失败，请检查摄像头是否可用！')
-    })
-}
+      const canvas = document.getElementById('canvas')
+      const context = canvas.getContext('2d')
 
-function closeCamera() {
-  const video: HTMLVideoElement = curInstance?.refs.video as HTMLVideoElement
-  if (!video.srcObject) {
-    return
+      // 固定写法
+      const tracker = new window.tracking.ObjectTracker('face')
+      tracker.setInitialScale(4)
+      tracker.setStepSize(2)
+      tracker.setEdgesDensity(0.1)
+      window.tracking.track('#video', tracker, {
+        camera: true
+      })
+
+      const _this = this
+      tracker.on('track', function (event) {
+        // 检测出人脸 绘画人脸位置
+        context.clearRect(0, 0, canvas.width, canvas.height)
+        event.data.forEach(function (rect) {
+          context.strokeStyle = '#0764B7'
+          context.strokeRect(rect.x, rect.y, rect.width, rect.height)
+
+          // 上传图片
+          _this.uploadLock && _this.screenshotAndUpload()
+        })
+      })
+    },
+    // 上传图片
+    screenshotAndUpload() {
+      // 上锁避免重复发送请求
+      this.uploadLock = false
+
+      // 绘制当前帧图片转换为base64格式
+      const canvas = this.screenshotCanvas
+      const video = this.video
+      const ctx = canvas.getContext('2d')
+      ctx.clearRect(0, 0, canvas.width, canvas.height)
+      ctx.drawImage(video, 0, 0, canvas.width, canvas.height)
+      const base64Img = canvas.toDataURL('image/jpeg')
+
+      // 使用 base64Img 请求接口即可
+      console.log('base64Img:', base64Img)
+
+      // 请求接口成功以后打开锁
+      // this.uploadLock = true;
+    }
   }
-  video.srcObject.getTracks().forEach((track: any) => {
-    track.stop()
-  })
-  video.srcObject = null
-}
-
-function capture() {
-  // const canvas: HTMLCanvasElement = curInstance?.refs
-  //   .canvas as HTMLCanvasElement
-  // const video: HTMLVideoElement = curInstance?.refs.video as HTMLVideoElement
-  // const ctx = canvas.getContext('2d')
-  // if (ctx != null) {
-  //   // 把当前视频帧内容渲染到canvas上
-  //   ctx.drawImage(video, 0, 0, 640, 480)
-  // }
-  // // 转base64格式、图片格式转换、图片质量压缩
-  // const imgBase64 = canvas.toDataURL('image/jpeg', 0.7) // 由字节转换为KB 判断大小
-  // const str = imgBase64.replace('data:image/jpeg;base64,', '')
-  // const strLength = str.length
-  // const fileLength = parseInt(strLength - (strLength / 8) * 2) // 图片尺寸  用于判断
-  // let size = (fileLength / 1024).toFixed(2)
-  // console.log(size) // 上传拍照信息  调用接口上传图片 .........
-  // // 保存到本地
-  // this.dialogCamera = false
-  // let ADOM = document.createElement('a')
-  // ADOM.href = this.headImgSrc
-  // ADOM.download = new Date().getTime() + '.jpeg'
-  // ADOM.click()
 }
 </script>
 
 <template>
-  <app-layout>
-    <div class="container">
-      <icon-svg @click="callCamera" name="camera" size="34" />
-      <icon-svg @click="closeCamera" name="camera-off" size="34" />
-      <icon-svg @click="capture" name="aperture" size="34" />
-      <!--canvas截取流-->
-      <canvas ref="canvas" width="640" height="480"></canvas>
-      <!--图片展示-->
-      <video ref="video" width="640" height="480" autoplay></video>
+  <div>
+    <div class="video-box">
+      <video
+        id="video"
+        width="320"
+        height="240"
+        preload
+        autoplay
+        loop
+        muted
+      ></video>
+      <canvas id="canvas" width="320" height="240"></canvas>
     </div>
-  </app-layout>
+    <canvas id="screenshotCanvas" width="320" height="240"></canvas>
+  </div>
 </template>
 
-<style scoped></style>
+<style scoped>
+/* 绘图canvas 不需显示隐藏即可 */
+#screenshotCanvas {
+  display: none;
+}
+
+.video-box {
+  position: relative;
+  width: 320px;
+  height: 240px;
+}
+
+video,
+canvas {
+  position: absolute;
+  top: 0;
+  left: 0;
+  border: #000000 5px solid;
+}
+</style>

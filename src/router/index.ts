@@ -17,6 +17,11 @@ const routes = [
     component: () => import('@/views/vlpr/index.vue')
   },
   {
+    path: '/display',
+    name: 'Vehicle Display',
+    component: () => import('@/views/display/index.vue')
+  },
+  {
     path: '/test',
     name: 'Test',
     component: () => import('@/views/test/index.vue')

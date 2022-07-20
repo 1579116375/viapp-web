@@ -2,6 +2,7 @@
 import MenuItem, { MenuItemData } from '@/components/global/MenuItem.vue'
 
 const keyFunction: MenuItemData[] = [
+  { routerLink: '/display', routerName: '车辆展示' },
   { routerLink: '/vlpr', routerName: '车牌识别' },
   { routerLink: '/', routerName: '车型识别' },
   { routerLink: '/', routerName: '车辆检测' },
